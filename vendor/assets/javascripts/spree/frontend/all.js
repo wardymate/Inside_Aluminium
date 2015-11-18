@@ -9,3 +9,5 @@
 //= require spree/frontend
 
 //= require_tree .
+//= require spree/frontend/spree_my_calc
+//= require spree/frontend/spree_estimated_delivery_dates

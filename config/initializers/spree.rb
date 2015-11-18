@@ -16,3 +16,17 @@ Spree.config do |config|
 end
 
 Spree.user_class = "Spree::User"
+config = Rails.application.config
+config.after_initialize do
+  config.spree.calculators.shipping_methods << Spree::Calculator::Shipping::MyCalc
+  config.spree.calculators.shipping_methods << Spree::Calculator::Shipping::TuffNextDay
+  config.spree.calculators.tax_rates << Spree::Calculator::Tax::VAT
+end
+
+# config.after_initialize do
+#   config.spree.calculators.shipping_methods << Spree::Calculator::Shipping::TuffNextDay
+# end
+#
+# config.after_initialize do
+#   config.spree.calculators.tax_rates << Spree::Calculator::Tax::VAT
+# end

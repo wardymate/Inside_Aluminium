@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.4'
+gem 'rails', '4.2.5'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -49,3 +49,7 @@ end
 gem 'spree', '3.0.4'
 gem 'spree_gateway', github: 'spree/spree_gateway', branch: '3-0-stable'
 gem 'spree_auth_devise', github: 'spree/spree_auth_devise', branch: '3-0-stable'
+gem 'spree_mail_settings', github: 'charlietarr1/spree_mail_settings', branch: 'master'
+
+gem 'spree_my_calc', '3.0.4', :path => '../inside_aluminium_store/extensions/spree_my_calc'
+gem 'spree_estimated_delivery_dates', '3.0.4', :path => '../inside_aluminium_store/extensions/spree_estimated_delivery_dates'

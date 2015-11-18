@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109114250) do
+ActiveRecord::Schema.define(version: 20151116125521) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -628,19 +628,20 @@ ActiveRecord::Schema.define(version: 20151109114250) do
   create_table "spree_shipments", force: :cascade do |t|
     t.string   "tracking"
     t.string   "number"
-    t.decimal  "cost",                 precision: 10, scale: 2, default: 0.0
+    t.decimal  "cost",                    precision: 10, scale: 2, default: 0.0
     t.datetime "shipped_at"
     t.integer  "order_id"
     t.integer  "address_id"
     t.string   "state"
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
     t.integer  "stock_location_id"
-    t.decimal  "adjustment_total",     precision: 10, scale: 2, default: 0.0
-    t.decimal  "additional_tax_total", precision: 10, scale: 2, default: 0.0
-    t.decimal  "promo_total",          precision: 10, scale: 2, default: 0.0
-    t.decimal  "included_tax_total",   precision: 10, scale: 2, default: 0.0, null: false
-    t.decimal  "pre_tax_amount",       precision: 12, scale: 4, default: 0.0, null: false
+    t.decimal  "adjustment_total",        precision: 10, scale: 2, default: 0.0
+    t.decimal  "additional_tax_total",    precision: 10, scale: 2, default: 0.0
+    t.decimal  "promo_total",             precision: 10, scale: 2, default: 0.0
+    t.decimal  "included_tax_total",      precision: 10, scale: 2, default: 0.0, null: false
+    t.decimal  "pre_tax_amount",          precision: 12, scale: 4, default: 0.0, null: false
+    t.date     "estimated_delivery_date"
   end
 
   add_index "spree_shipments", ["address_id"], name: "index_spree_shipments_on_address_id"
