@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151116125521) do
+ActiveRecord::Schema.define(version: 20151118171536) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -736,11 +736,13 @@ ActiveRecord::Schema.define(version: 20151116125521) do
   create_table "spree_stock_items", force: :cascade do |t|
     t.integer  "stock_location_id"
     t.integer  "variant_id"
-    t.integer  "count_on_hand",     default: 0,     null: false
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.boolean  "backorderable",     default: false
+    t.integer  "count_on_hand",           default: 0,     null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "backorderable",           default: false
     t.datetime "deleted_at"
+    t.integer  "projected_count_on_hand"
+    t.integer  "count_on_order"
   end
 
   add_index "spree_stock_items", ["backorderable"], name: "index_spree_stock_items_on_backorderable"
@@ -776,12 +778,14 @@ ActiveRecord::Schema.define(version: 20151116125521) do
 
   create_table "spree_stock_movements", force: :cascade do |t|
     t.integer  "stock_item_id"
-    t.integer  "quantity",        default: 0
+    t.integer  "quantity",               default: 0
     t.string   "action"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.integer  "originator_id"
     t.string   "originator_type"
+    t.date     "estimated_arrival_date"
+    t.string   "status"
   end
 
   add_index "spree_stock_movements", ["stock_item_id"], name: "index_spree_stock_movements_on_stock_item_id"
@@ -946,21 +950,22 @@ ActiveRecord::Schema.define(version: 20151116125521) do
   add_index "spree_users", ["spree_api_key"], name: "index_spree_users_on_spree_api_key"
 
   create_table "spree_variants", force: :cascade do |t|
-    t.string   "sku",                                        default: "",    null: false
-    t.decimal  "weight",            precision: 8,  scale: 2, default: 0.0
-    t.decimal  "height",            precision: 8,  scale: 2
-    t.decimal  "width",             precision: 8,  scale: 2
-    t.decimal  "depth",             precision: 8,  scale: 2
+    t.string   "sku",                                          default: "",    null: false
+    t.decimal  "weight",              precision: 8,  scale: 2, default: 0.0
+    t.decimal  "height",              precision: 8,  scale: 2
+    t.decimal  "width",               precision: 8,  scale: 2
+    t.decimal  "depth",               precision: 8,  scale: 2
     t.datetime "deleted_at"
-    t.boolean  "is_master",                                  default: false
+    t.boolean  "is_master",                                    default: false
     t.integer  "product_id"
-    t.decimal  "cost_price",        precision: 10, scale: 2
+    t.decimal  "cost_price",          precision: 10, scale: 2
     t.integer  "position"
     t.string   "cost_currency"
-    t.boolean  "track_inventory",                            default: true
+    t.boolean  "track_inventory",                              default: true
     t.integer  "tax_category_id"
     t.datetime "updated_at"
-    t.integer  "stock_items_count",                          default: 0,     null: false
+    t.integer  "stock_items_count",                            default: 0,     null: false
+    t.boolean  "stocked_by_stylmark"
   end
 
   add_index "spree_variants", ["deleted_at"], name: "index_spree_variants_on_deleted_at"
