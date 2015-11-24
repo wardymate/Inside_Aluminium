@@ -1,8 +1,8 @@
 module Spree
   StockItem.class_eval do
-    def adjust_projected_count_hand(value)
+    def adjust_projected_count_hand
       self.with_lock do
-        self.projected_count_on_hand = (self.projected_count_on_hand + value)
+        self.projected_count_on_hand = (self.count_on_hand + self.count_on_order)
         self.save!
       end
     end

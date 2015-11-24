@@ -1,7 +1,7 @@
 # This code relates to estimated delivery date for in stock items
 
 Deface::Override.new(:virtual_path => 'spree/checkout/_delivery',
-  :name => 'add_estimated_shipping_date_to_delivery',
+  :name => 'ammend_checkout_delivery_partial',
   :insert_after => "ul.list-group",
   :text => "
     <h4 class='stock-shipping-method-title'> Estimated Delivery Date </h4>

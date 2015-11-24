@@ -1,0 +1,51 @@
+<% content_for :page_title do %>
+   Purchase Orders (<%= Spree::StockTransfer.find(@stock_movement.originator_id).number %>)
+<% end %>
+
+<fieldset>
+  <legend> Purchase Order </legend>
+
+  <table class="table table-bordered">
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:created_at) %></strong></td>
+      <td><%= Spree::StockTransfer.find(@stock_movement.originator_id).created_at %></td>
+    </tr>
+  </table>
+
+
+  <fieldset>
+    <legend id="stock-location-destination">
+      <%= Spree.t(:destination) %> / <%= Spree::StockLocation.find(1).name %>
+    </legend>
+  </fieldset>
+
+<%= form_for @stock_movement, :url => admin_stock_location_stock_movement_path do |f| %>
+
+  <div id="source-movements-table" class="twelve columns alpha">
+    <table class="table sortable">
+      <thead data-hook="bulk_variants_header">
+        <tr>
+          <th><%= Spree.t('variant') %></th>
+          <th><%= Spree.t('sku') %></th>
+          <th><%= Spree.t('quantity') %></th>
+          <th><%= Spree.t('sales_order_number') %></th>
+          <th><%= Spree.t('due_to_arrive') %></th>
+          <th><%= Spree.t('status') %></th>
+        </tr>
+      </thead>
+      <tbody id="bulk_variants_tbody">
+          <tr>
+            <td><%= @stock_movement.stock_item.variant.name %></td>
+            <td><%= @stock_movement.stock_item.variant.sku %></td>
+            <td><%= @stock_movement.quantity %></td>
+            <td><%= f.text_field :sales_order_number %></td>
+            <td><%= f.text_field :estimated_arrival_date, :class => 'datepicker' %></td>
+            <td><%= f.select :status, ['On Order', 'Complete'] %></td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+</fieldset>
+<%= f.submit 'Update Order', class: 'btn btn-primary' %>
+<%= button_link_to Spree.t(:Cancel), admin_stock_transfer_path(@stock_movement.originator_id), { :class => 'btn-danger' } %>
+<% end %>

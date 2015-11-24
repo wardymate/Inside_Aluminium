@@ -60,4 +60,19 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  Spree::Core::Engine.routes.draw do
+    namespace :admin do
+      resources :stock_locations do
+        resources :stock_movements, except: [:destroy]
+        collection do
+          post :transfer_stock
+        end
+      end
+    end
+  end
+
+
+
+
 end

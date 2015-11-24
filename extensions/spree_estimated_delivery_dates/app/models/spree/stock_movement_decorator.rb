@@ -17,7 +17,7 @@ module Spree
       stock_item.adjust_count_on_order(quantity)
 
       #PROJECTED COUNT ON HAND
-      stock_item.adjust_projected_count_hand(quantity)
+      stock_item.adjust_projected_count_hand
 
       #ESTIMATED ARRIVAL DATE
       a = self.stock_item_id
@@ -69,7 +69,6 @@ module Spree
         d = c.to_date + 12
       elsif c.friday? == true && c.hour >= 12 && b == true
         d = c.to_date + 12
-      end
 
       elsif c.saturday? == true && c.hour < 12 && b == false
         d = c.to_date + 11
@@ -79,7 +78,6 @@ module Spree
         d = c.to_date + 11
       elsif c.saturday? == true && c.hour >= 12 && b == true
         d = c.to_date + 11
-      end
 
       elsif c.sunday? == true && c.hour < 12 && b == false
         d = c.to_date + 10
@@ -94,6 +92,18 @@ module Spree
       self.update(estimated_arrival_date: d)
       #ORDER STATUS
       self.update(status: "On Order")
+    end
+  end
+end
+
+
+module Spree
+  StockMovement.class_eval do
+    def update_stock_on_order_completion(stock_movement)
+      stock_movement.stock_item.adjust_count_on_hand(stock_movement.quantity)
+      b = stock_movement.stock_item.count_on_order - stock_movement.quantity
+      c = stock_movement.stock_item.count_on_hand + b
+      stock_movement.stock_item.update(count_on_order: b, projected_count_on_hand: c)
     end
   end
 end
