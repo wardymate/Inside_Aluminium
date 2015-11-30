@@ -16,8 +16,3 @@ Spree::Admin::StockMovementsController.class_eval do
 
   end
 end
-
-
-# if @stock_movement.update(params[:stock_movement]) && params[:status == 'Complete']
-#   update_stock_on_order_completion(@stock_movement)
-#   redirect_to admin_stock_transfer_path(@stock_movement.originator_id), notice: "Order successfully updated & Stock Levels Ammended!"

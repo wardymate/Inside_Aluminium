@@ -1,3 +1,8 @@
+module Spree
+  StockMovement.class_eval do
+    belongs_to :sales_order
+  end
+end
 
 module Spree
   StockMovement.class_eval do

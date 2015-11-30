@@ -53,3 +53,4 @@ gem 'spree_mail_settings', github: 'charlietarr1/spree_mail_settings', branch: '
 
 gem 'spree_my_calc', '3.0.4', :path => '../inside_aluminium_store/extensions/spree_my_calc'
 gem 'spree_estimated_delivery_dates', '3.0.4', :path => '../inside_aluminium_store/extensions/spree_estimated_delivery_dates'
+gem 'spree_sales_orders', '3.0.4', :path => '../inside_aluminium_store/extensions/spree_sales_orders'

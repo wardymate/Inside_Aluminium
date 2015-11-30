@@ -11,3 +11,4 @@
 //= require_tree .
 //= require spree/backend/spree_my_calc
 //= require spree/backend/spree_estimated_delivery_dates
+//= require spree/backend/spree_sales_orders

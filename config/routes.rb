@@ -72,6 +72,14 @@ Rails.application.routes.draw do
     end
   end
 
+Spree::Core::Engine.routes.draw do
+  namespace :admin do
+    resources :stock_transfers, only: [:index, :show, :new, :create] do
+      resources :sales_orders
+    end
+  end
+end
+
 
 
 

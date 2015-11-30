@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124105327) do
+ActiveRecord::Schema.define(version: 20151130134653) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -625,6 +625,15 @@ ActiveRecord::Schema.define(version: 20151124105327) do
   add_index "spree_roles_users", ["role_id"], name: "index_spree_roles_users_on_role_id"
   add_index "spree_roles_users", ["user_id"], name: "index_spree_roles_users_on_user_id"
 
+  create_table "spree_sales_orders", force: :cascade do |t|
+    t.integer  "number"
+    t.integer  "stock_transfer_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "spree_sales_orders", ["stock_transfer_id"], name: "index_spree_sales_orders_on_stock_transfer_id"
+
   create_table "spree_shipments", force: :cascade do |t|
     t.string   "tracking"
     t.string   "number"
@@ -787,8 +796,10 @@ ActiveRecord::Schema.define(version: 20151124105327) do
     t.date     "estimated_arrival_date"
     t.string   "status"
     t.text     "sales_order_number"
+    t.integer  "sales_order_id"
   end
 
+  add_index "spree_stock_movements", ["sales_order_id"], name: "index_spree_stock_movements_on_sales_order_id"
   add_index "spree_stock_movements", ["stock_item_id"], name: "index_spree_stock_movements_on_stock_item_id"
 
   create_table "spree_stock_transfers", force: :cascade do |t|
