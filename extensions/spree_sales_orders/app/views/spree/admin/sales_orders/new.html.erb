@@ -1,16 +1,11 @@
-
-<%= form_for [:admin, @stock_transfer, @sales_order] do |f| %>
-
 <% content_for :page_title do %>
-  <%= f.text_field :number, :size => 30, :placeholder => "Add Sales Order Number Here" %>
+  Sales Order
 <% end %>
   <% @a = @stock_transfer.stock_movements.map { |h| h[:estimated_arrival_date]}.uniq %>
   <% @a.sort! %>
+
+
   <%= render :partial => 'list_of_stock_movements' %>
 
 
 </fieldset>
-
-<%= f.submit 'Create Sales Order', class: 'btn btn-primary' %>
-<%= button_link_to Spree.t(:Cancel), admin_stock_transfer_path(params[:stock_transfer_id]), { :class => 'btn-danger' } %>
-<% end %>

@@ -74,8 +74,14 @@ Rails.application.routes.draw do
 
 Spree::Core::Engine.routes.draw do
   namespace :admin do
-    resources :stock_transfers, only: [:index, :show, :new, :create] do
+    resources :stock_transfers do
       resources :sales_orders
+      resources :stock_movements do
+        collection do
+          get 'new_1'
+          post 'create_1'
+        end
+      end
     end
   end
 end

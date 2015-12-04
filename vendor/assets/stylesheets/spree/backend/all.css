@@ -10,4 +10,6 @@
  *= require spree/backend/spree_my_calc
  *= require spree/backend/spree_estimated_delivery_dates
  *= require spree/backend/spree_sales_orders
+ *= require spree/backend/spree_stock_transfers
+ *= require spree/backend/spree_stock_movements
 */

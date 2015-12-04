@@ -28,7 +28,6 @@
           <th><%= Spree.t('variant') %></th>
           <th><%= Spree.t('sku') %></th>
           <th><%= Spree.t('quantity') %></th>
-          <th><%= Spree.t('sales_order_number') %></th>
           <th><%= Spree.t('due_to_arrive') %></th>
           <th><%= Spree.t('status') %></th>
         </tr>
@@ -37,10 +36,9 @@
           <tr>
             <td><%= @stock_movement.stock_item.variant.name %></td>
             <td><%= @stock_movement.stock_item.variant.sku %></td>
-            <td><%= @stock_movement.quantity %></td>
-            <td><%= f.text_field :sales_order_number %></td>
+            <td><%= f.number_field :quantity %></td>
             <td><%= f.text_field :estimated_arrival_date, :class => 'datepicker' %></td>
-            <td><%= f.select :status, ['On Order', 'Complete'] %></td>
+            <td><%= f.select :status, ['Pending', 'On Order', 'Complete'] %></td>
           </tr>
       </tbody>
     </table>
