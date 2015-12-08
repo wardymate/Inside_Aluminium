@@ -3,18 +3,23 @@ module Spree
     StockTransfersController.class_eval do
 
       def create
-        variants = Hash.new(0)
-        params[:variant].each_with_index do |variant_id, i|
-          variants[variant_id] += params[:quantity][i].to_i
+        if params.include?(:variant)
+          variants = Hash.new(0)
+          params[:variant].each_with_index do |variant_id, i|
+            variants[variant_id] += params[:quantity][i].to_i
+          end
+
+          stock_transfer = Spree::StockTransfer.create(status: 'Created')
+          stock_transfer.transfer(source_location,
+                                  destination_location,
+                                  variants)
+
+          flash[:success] = 'Purchase Order Successfully Created!'
+          redirect_to admin_stock_transfer_path(stock_transfer)
+        else
+          flash[:error] = 'You must add at least 1 part number!'
+          render :new
         end
-
-        stock_transfer = Spree::StockTransfer.create(status: 'Created')
-        stock_transfer.transfer(source_location,
-                                destination_location,
-                                variants)
-
-        flash[:success] = Spree.t(:stock_successfully_transferred)
-        redirect_to admin_stock_transfer_path(stock_transfer)
       end
 
       def edit

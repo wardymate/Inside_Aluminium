@@ -1,7 +1,3 @@
-<% content_for :page_title do %>
-   Purchase Order (<%= @stock_transfer.number %>)
-<% end %>
-
 <script type='text/template' id='transfer_variant_template'>
   {{#each variants}}
     <tr>
@@ -18,8 +14,9 @@
   {{/each}}
 </script>
 
-<%= form_tag create_1_admin_stock_transfer_stock_movements_path do %>
+<%= form_tag admin_stock_transfers_path, :method => :post do %>
   <div class="panel panel-default">
+
 
     <div class="panel-body">
       <div data-hook="admin_stock_movements_form_fields">
@@ -55,7 +52,7 @@
         <div class="col-md-8">
           <div class="form-group" id="stock_movement_variant_id_field">
             <%= label_tag 'variant_id', Spree.t(:part_number) %>
-            <%= hidden_field_tag 'transfer_variant', {}, {class: 'fullwidth-input'} %>
+            <%= hidden_field_tag 'transfer_variant', {} ,{class: 'fullwidth-input'} %>
           </div>
         </div>
 
@@ -65,7 +62,7 @@
             <div class="input-group">
               <%= number_field_tag :transfer_variant_quantity, 1, class: 'form-control', min: 0 %>
               <span class="input-group-btn">
-                <%= button Spree.t(:add), 'plus', 'submit', class: "transfer_add_variant" %>
+                <%= button Spree.t(:add), 'plus', 'submit', class: "transfer_add_variant" %></span>
               </span>
             </div>
           </div>
@@ -92,7 +89,7 @@
   </div>
 
   <div class="form-actions" data-hook="buttons">
-    <%= button Spree.t(:add_to_purchase_order), 'plus transfer_transfer' %>
-    <%= button_link_to Spree.t(:Cancel), admin_stock_transfer_path(@stock_transfer), { :class => 'btn-danger' } %>
+    <%= button Spree.t(:create_purchase_order), 'plus transfer_transfer' %>
+    <%= button_link_to Spree.t(:Cancel), admin_stock_transfers_path, { :class => 'btn-danger' } %>
   </div>
 <% end %>

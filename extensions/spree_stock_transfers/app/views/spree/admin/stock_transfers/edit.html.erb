@@ -10,6 +10,26 @@
       <td width="30%"><strong><%= Spree.t(:created_at) %></strong></td>
       <td><%= @stock_transfer.created_at %></td>
     </tr>
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:status) %></strong></td>
+      <td><%= @stock_transfer.status %></td>
+    </tr>
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:required_action) %></strong></td>
+      <td>
+          <% if @stock_transfer.stock_movements.count == 0 %>
+            There are no part numbers on this purchase order.
+            Either add some part numbers below or delete this purchase order.
+          <% elsif @stock_transfer.status == 'Created' && @stock_transfer.stock_movements.count > 0 %>
+            This order has not yet been sent to Stylmark.
+            Please review the contents of this order and make any required ammendments.
+            When you are satisfied, please click 'Progress Purchase Order'.
+          <% elsif @stock_transfer.status == 'Sent To Stylmark' %>
+            This order has been sent to Stylmark.
+            If you make any changes to it at this point, you will need to click Amend Purchase Order when you are done and then 'Re-Send' the purchase order to Stylmark.
+          <% end %>
+      </td>
+    </tr>
   </table>
 
     <% @a = @stock_transfer.stock_movements.map { |h| h[:estimated_arrival_date]}.uniq %>

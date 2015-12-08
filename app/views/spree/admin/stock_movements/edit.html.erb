@@ -1,5 +1,7 @@
+<% @stock_transfer = Spree::StockTransfer.find(@stock_movement.originator_id) %>
+
 <% content_for :page_title do %>
-   Purchase Orders (<%= Spree::StockTransfer.find(@stock_movement.originator_id).number %>)
+   Purchase Orders (<%= @stock_transfer.number %>)
 <% end %>
 
 <fieldset>
@@ -36,9 +38,21 @@
           <tr>
             <td><%= @stock_movement.stock_item.variant.name %></td>
             <td><%= @stock_movement.stock_item.variant.sku %></td>
-            <td><%= f.number_field :quantity %></td>
+            <td>
+              <% if @stock_transfer.status == 'Created' || 'Sent To Stylmark' %>
+                <%= f.number_field :quantity %>
+              <% else %>
+                <%= @stock_movement.quantity %>
+              <% end %>
+            </td>
             <td><%= f.text_field :estimated_arrival_date, :class => 'datepicker' %></td>
-            <td><%= f.select :status, ['Pending', 'On Order', 'Complete'] %></td>
+            <td>
+              <% if @stock_transfer.status == 'Created' || 'Sent To Stylmark' %>
+                <%= @stock_movement.status %>
+              <% else %>
+                <%= f.select :status, ['On Order', 'Complete'] %>
+              <% end %>
+            </td>
           </tr>
       </tbody>
     </table>

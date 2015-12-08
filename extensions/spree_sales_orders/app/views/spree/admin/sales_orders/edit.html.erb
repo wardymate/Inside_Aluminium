@@ -1,0 +1,53 @@
+<%= form_for([:admin, @stock_transfer, @sales_order]) do |f| %>
+
+
+      <h3> Sales Order <%= f.text_field :number %> <span style='float:right'> Status <%= f.select :status, ['In Progress', 'Complete'] %> </span></h3>
+
+<br><br>
+
+
+
+<fieldset>
+
+  <table class="table table-bordered">
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:created_at) %></strong></td>
+      <td><%= @sales_order.created_at %></td>
+    </tr>
+  </table>
+
+  <fieldset>
+
+    <div id='source-movements-table' class='twelve columns alpha'>
+      <table class='table sortable'>
+        <thead data-hook='bulk_variants_header'>
+          <tr>
+            <th><%= Spree.t('variant') %></th>
+            <th><%= Spree.t('sku') %></th>
+            <th><%= Spree.t('quantity') %></th>
+            <th><%= Spree.t('due_to_arrive') %></th>
+            <th><%= Spree.t('status') %></th>
+          </tr>
+        </thead>
+        <tbody id='bulk_variants_tbody'>
+          <% @sales_order.stock_movements.each do |movement| %>
+            <tr>
+                <td><%= movement.stock_item.variant.name %></td>
+                <td><%= movement.stock_item.variant.sku %></td>
+                <td><%= movement.quantity %></td>
+                <td><%= movement.estimated_arrival_date %></td>
+                <td><%= movement.status %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+  </fieldset>
+
+
+</fieldset>
+
+  <%= f.submit 'Update Sales Order', class: 'btn btn-primary' %>
+  <%= button_link_to Spree.t(:Cancel), admin_stock_transfer_path(@stock_transfer), { :class => 'btn-danger' } %>
+<% end %>

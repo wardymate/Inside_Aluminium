@@ -95,6 +95,10 @@ module Spree
       end
 
       self.update(estimated_arrival_date: d)
+
+      #INTIAL EAD
+      self.update(initial_ead: d)
+
       #ORDER STATUS
       self.update(status: "Pending")
     end

@@ -1,8 +1,31 @@
 <fieldset>
 
-  <% relevant_stock_movements = @stock_transfer.stock_movements.where(estimated_arrival_date: relevant_date) %>
+  <% relevant_stock_movements = @stock_transfer.stock_movements.where(initial_ead: relevant_date) %>
+  <% relevant_sales_order = relevant_stock_movements[0].sales_order %>
+  <h3> Sales Order (<%= relevant_sales_order.number %>)
+    <% unless relevant_sales_order.status == 'Complete' %>
+      <span style='float:right'><%= button_link_to "Delete Sales Order", admin_stock_transfer_sales_order_path(@stock_transfer, relevant_sales_order_id), class: 'btn-danger',  method: :delete, data: { confirm: 'Are you sure?' } %></span>
+      <span style='float:right'><%= button_link_to Spree.t(:edit_sales_order), edit_admin_stock_transfer_sales_order_path(@stock_transfer, relevant_sales_order_id), class: 'btn-info' %></span>
+    <% end %>
+  </h3>
+  <br>
 
-  <h3> Sales Order (<%= relevant_stock_movements[0].sales_order.number %>) </h3>
+  <table class="table table-bordered">
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:created_at) %></strong></td>
+      <td><%= relevant_sales_order.created_at %></td>
+    </tr>
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:status) %></strong></td>
+      <td><%= relevant_sales_order.status %></td>
+    </tr>
+    <% if relevant_sales_order.status == 'BLA' %>
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:required_action) %></strong></td>
+      <td> This order has not yet been sent to Stylmark. Please review the contents of this order and make any required ammendments. When you are satisfied, please click 'Progress Purchase Order'. </td>
+    </tr>
+    <% end %>
+  </table>
 
   <div id='source-movements-table' class='twelve columns alpha'>
     <table class='table sortable'>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151202100208) do
+ActiveRecord::Schema.define(version: 20151208113846) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -631,6 +631,7 @@ ActiveRecord::Schema.define(version: 20151202100208) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.date     "estimated_arrival_date"
+    t.string   "status"
   end
 
   add_index "spree_sales_orders", ["stock_transfer_id"], name: "index_spree_sales_orders_on_stock_transfer_id"
@@ -796,8 +797,8 @@ ActiveRecord::Schema.define(version: 20151202100208) do
     t.string   "originator_type"
     t.date     "estimated_arrival_date"
     t.string   "status"
-    t.text     "sales_order_number"
     t.integer  "sales_order_id"
+    t.date     "initial_ead"
   end
 
   add_index "spree_stock_movements", ["sales_order_id"], name: "index_spree_stock_movements_on_sales_order_id"

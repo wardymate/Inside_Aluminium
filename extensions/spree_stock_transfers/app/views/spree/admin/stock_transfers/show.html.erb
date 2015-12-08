@@ -1,11 +1,3 @@
-<%= javascript_tag do %>
-  $(document).ready(function(){
-    $("#flip").click(function(){
-        $("#panel").slideDown("slow");
-      });
-  });
-<% end %>
-
 <% content_for :page_title do %>
    Purchase Order (<%= @stock_transfer.number %>)
 <% end %>
@@ -25,57 +17,93 @@
       <td width="30%"><strong><%= Spree.t(:status) %></strong></td>
       <td><%= @stock_transfer.status %></td>
     </tr>
-    <% if @stock_transfer.status == 'Created' %>
     <tr>
       <td width="30%"><strong><%= Spree.t(:required_action) %></strong></td>
-      <td> This order has not yet been sent to Stylmark. Please click 'View Items' to review the contents of this order and make any required ammendments. When you are satisfied, please click 'Progress Purchase Order'. </td>
+      <td>
+          <% if @stock_transfer.stock_movements.count == 0 %>
+            There are no part numbers on this purchase order.
+            Either add some part numbers below or delete this purchase order.
+          <% elsif @stock_transfer.status == 'Created' && @stock_transfer.stock_movements.count > 0 %>
+            This order has not yet been sent to Stylmark.
+            Please review the contents of this order and make any required ammendments.
+            When you are satisfied, please click 'Progress Purchase Order'.
+          <% elsif @stock_transfer.status == 'Sent To Stylmark' %>
+            This order has been sent to Stylmark.
+            If you make any changes to it at this point, you will need to click Amend Purchase Order when you are done and then 'Re-Send' the purchase order to Stylmark.<br><br>
+            When you recieve confirmed sales order(s) back from Stylmark, please make any necessary changes and then click 'New Sales Order(s)' to create these.
+          <% end %>
+      </td>
     </tr>
-    <% end %>
   </table>
 
-    <% @a = @stock_transfer.stock_movements.map { |h| h[:estimated_arrival_date]}.uniq %>
-    <% @a.sort! %>
-    <% relevant_stock_movements_1 = @stock_transfer.stock_movements.where(estimated_arrival_date: @a[0]) %>
-    <% relevant_stock_movements_2 = @stock_transfer.stock_movements.where(estimated_arrival_date: @a[1]) %>
-    <% relevant_stock_movements_3 = @stock_transfer.stock_movements.where(estimated_arrival_date: @a[2]) %>
+<br>
 
-    <span id='flip'><button type="button" class="btn btn-secondary" style='color: white' style='float:left'>View Items</button><span>
+  <% @a = @stock_transfer.stock_movements.map { |h| h[:estimated_arrival_date]}.uniq %>
+  <% @a.sort! %>
+  <% relevant_stock_movements_1 = @stock_transfer.stock_movements.where(estimated_arrival_date: @a[0]) %>
+  <% relevant_stock_movements_2 = @stock_transfer.stock_movements.where(estimated_arrival_date: @a[1]) %>
+  <% relevant_stock_movements_3 = @stock_transfer.stock_movements.where(estimated_arrival_date: @a[2]) %>
 
-    <div id='panel'>
+  <% @b = @stock_transfer.stock_movements.map { |h| h[:initial_ead]}.uniq %>
+  <% @b.sort! %>
+  <% b_stock_movements_1 = @stock_transfer.stock_movements.where(initial_ead: @b[0]) %>
+  <% b_stock_movements_2 = @stock_transfer.stock_movements.where(initial_ead: @b[1]) %>
+  <% b_stock_movements_3 = @stock_transfer.stock_movements.where(initial_ead: @b[2]) %>
+
+
+  <% if @a.size == 0 %>
+    <%= %>
+  <% else %>
+    <div>
       <br>
-
       <% if @a.size >= 1 && relevant_stock_movements_1.any? {|h| h[:sales_order_id] == nil } %>
         <%= render partial: 'stock_movements', locals: {relevant_date: @a[0]} %>
       <% else %>
-        <%= render :partial => 'completed_stock_movements', locals: {relevant_date: @a[0]}  %>
+        <%= render :partial => 'completed_stock_movements', locals: {relevant_date: @b[0], relevant_sales_order_id: b_stock_movements_1[0].sales_order_id}  %>
       <% end %>
-
-
+      <br>
       <% if @a.size < 2 %>
         <%= %>
       <% elsif @a.size >= 2 && relevant_stock_movements_2.any? {|h| h[:sales_order_id] == nil }%>
         <%= render :partial => 'stock_movements', locals: {relevant_date: @a[1]} %>
       <% else %>
-        <%= render :partial => 'completed_stock_movements', locals: {relevant_date: @a[1]} %>
+        <%= render :partial => 'completed_stock_movements', locals: {relevant_date: @b[1], relevant_sales_order_id: b_stock_movements_2[0].sales_order_id} %>
       <% end %>
-
+      <br>
       <% if @a.size < 3 %>
         <%= %>
       <% elsif @a.size >= 3 && relevant_stock_movements_3.any? {|h| h[:sales_order_id] == nil } %>
         <%= render :partial => 'stock_movements', locals: {relevant_date: @a[2]}  %>
       <% else %>
-        <%= render :partial => 'completed_stock_movements', locals: {relevant_date: @a[2]} %>
+        <%= render :partial => 'completed_stock_movements', locals: {relevant_date: @b[2], relevant_sales_order_id: b_stock_movements_3[0].sales_order_id} %>
       <% end %>
-
-      <span><%= button_link_to "Add New Part Number", new_1_admin_stock_transfer_stock_movements_path(@stock_transfer), class: 'btn-success' %></span>
-
+      <br>
     </div>
-</fieldset>
-<br>
-<% if @stock_transfer.status == 'Created' %>
-  <span style='float:left'><%= button_link_to Spree.t(:progress_purchase_order), edit_admin_stock_transfer_path, class: 'btn-primary' %></span>
-<% else %>
-  <span style='float:left'><%= button_link_to Spree.t(:amend_purchase_order), edit_admin_stock_transfer_path, { :class => 'btn-primary' } %></span>
-<% end %>
 
-<%= button_link_to "Delete Purchase Order", admin_stock_transfer_path(@stock_transfer), class: 'btn-danger',  method: :delete, data: { confirm: 'Are you sure?' } %>
+  <% end %>
+
+  <% if @stock_transfer.status == 'Created' %>
+    <%= button_link_to "Add New Part Number", new_1_admin_stock_transfer_stock_movements_path(@stock_transfer), class: 'btn-success' %>
+  <% elsif @stock_transfer.status == 'Sent To Stylmark' %>
+    <%= button_link_to "Add New Part Number", new_1_admin_stock_transfer_stock_movements_path(@stock_transfer), class: 'btn-success' %>
+  <% end %>
+
+
+
+</fieldset>
+
+<br><br>
+
+<% if @stock_transfer.status != 'Complete' %>
+  <div>
+    <% if @stock_transfer.status == 'Created' && @stock_transfer.stock_movements.count != 0 %>
+      <span style='float:left'><%= button_link_to Spree.t(:progress_purchase_order), edit_admin_stock_transfer_path, class: 'btn-primary' %></span>
+    <% elsif @stock_transfer.status != 'Created' && @stock_transfer.stock_movements.count != 0 %>
+      <span style='float:left'><%= button_link_to Spree.t(:amend_purchase_order), edit_admin_stock_transfer_path, { :class => 'btn-primary' } %></span>
+    <% end %>
+
+    <%= button_link_to "Delete Purchase Order", admin_stock_transfer_path(@stock_transfer), class: 'btn-danger',  method: :delete, data: { confirm: 'Are you sure?' } %>
+  </div>
+<% else %>
+  <%= button_link_to Spree.t(:view_all_purchase_orders), admin_stock_transfers_path, { :class => 'btn-primary' } %>
+<% end %>
