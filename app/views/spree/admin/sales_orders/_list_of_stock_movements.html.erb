@@ -1,0 +1,40 @@
+<fieldset>
+
+  <div id='source-movements-table' class='twelve columns alpha'>
+    <table class='table sortable'>
+      <thead data-hook='bulk_variants_header'>
+        <tr>
+          <th><%= Spree.t('variant') %></th>
+          <th><%= Spree.t('sku') %></th>
+          <th><%= Spree.t('quantity') %></th>
+          <th><%= Spree.t('due_to_arrive') %></th>
+          <th><%= Spree.t('status') %></th>
+        </tr>
+      </thead>
+      <tbody id='bulk_variants_tbody'>
+        <% @stock_transfer.stock_movements.where(estimated_arrival_date: @estimated_arrival_date).each do |movement| %>
+          <% if movement.status == 'Pending' %>
+            <tr>
+                <td><%= movement.stock_item.variant.name %></td>
+                <td><%= movement.stock_item.variant.sku %></td>
+                <td><%= movement.quantity %></td>
+                <td><%= movement.estimated_arrival_date %></td>
+                <td><%= movement.status %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+</fieldset>
+
+
+<%= form_for([:admin, @stock_transfer, @sales_order]) do |f| %>
+
+<% f.label :sales_order_number %> <%= f.text_field :number, size: 30, :placeholder => "Add Sales Order Number Here", autofocus: true %>
+</br></br>
+<%= f.hidden_field :estimated_arrival_date, value: @estimated_arrival_date %>
+<%= f.submit 'Create Sales Order', class: 'btn btn-primary' %>
+<%= button_link_to Spree.t(:Cancel), admin_stock_transfer_path(@stock_transfer), { :class => 'btn-danger' } %>
+<% end %>

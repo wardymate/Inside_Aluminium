@@ -1,0 +1,66 @@
+  <% content_for :page_title do %>
+     Purchase Order (<%= @stock_transfer.number %>)
+  <% end %>
+
+  <% content_for :page_actions do %>
+    <%= button_link_to Spree.t(:new_purchase_order), new_admin_stock_transfer_path, { :icon => 'add', :class => 'btn-success' } %>
+  <% end if can? :create, Spree::StockTransfer %>
+
+  <fieldset>
+
+    <%= render partial: 'order_information' %>
+    <br>
+
+
+  </fieldset>
+
+<!-- View to display when Stock Transfer status == 'Created' -->
+  <% if @stock_transfer.status == 'Created' %>
+    <%= render partial: 'created' %>
+  <% end %>
+<!-- END -->
+
+<!-- View to display when Stock Transfer status == 'Sent To Stylmark' -->
+  <% if @stock_transfer.status == 'Sent To Stylmark' %>
+    <%= render partial: 'sent_to_stylmark' %>
+  <% end %>
+<!-- END -->
+
+<!-- View to display when Stock Transfer status == 'Confirmed By Stylmark' -->
+
+  <% if @stock_transfer.status == 'Confirmed By Stylmark' %>
+    <%= render partial: 'confirmed_by_stylmark' %>
+  <% end %>
+
+<!-- END -->
+
+<!-- View to display when Stock Transfer status == 'Completed' -->
+
+  <% if @stock_transfer.status == 'Complete' %>
+    <%= render partial: 'completed' %>
+  <% end %>
+
+<!-- END -->
+
+<br><br>
+
+<!-- Logic for what buttons should be displayed at the bottom of the page -->
+  <% if @stock_transfer.status == 'Created' %>
+
+    <div>
+      <% unless @stock_transfer.stock_movements.count == 0 %>
+        <span style='float:left'><%= button_link_to Spree.t(:progress_purchase_order), edit_admin_stock_transfer_path, class: 'btn-primary' %></span>
+      <% end %>
+      <%= button_link_to "Delete Purchase Order", admin_stock_transfer_path(@stock_transfer), class: 'btn-danger',  method: :delete, data: { confirm: 'Are you sure? This action cannot be undone and will cause both the purchase order and all associated items to be deleted.' } %>
+    </div>
+
+  <% elsif @stock_transfer.status == 'Sent To Stylmark' %>
+    <%= button_link_to "Delete Purchase Order", admin_stock_transfer_path(@stock_transfer), class: 'btn-danger',  method: :delete, data: { confirm: 'Are you sure? This action cannot be undone and will cause both the purchase order and all associated items to be deleted.' } %>
+  <% elsif @stock_transfer.status == 'Confirmed By Stylmark' %>
+    <%= button_link_to "Delete Purchase Order", admin_stock_transfer_path(@stock_transfer), class: 'btn-danger',  method: :delete, data: { confirm: 'Are you sure? This action cannot be undone and will cause both the purchase order and all associated items to be deleted.' } %>
+  <% elsif @stock_transfer.status == 'Void' %>
+    <%= button_link_to "Delete Purchase Order", admin_stock_transfer_path(@stock_transfer), class: 'btn-danger',  method: :delete, data: { confirm: 'Are you sure? This action cannot be undone and will cause both the purchase order and all associated items to be deleted.' } %>
+  <% elsif @stock_transfer.status == 'Complete' %>
+    <%= button_link_to Spree.t(:view_all_purchase_orders), admin_stock_transfers_path, { :class => 'btn-primary' } %>
+  <% end %>
+<!-- END -->

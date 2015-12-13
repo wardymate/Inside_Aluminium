@@ -10,10 +10,10 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  # root 'home#index'
 
   # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
+    # get 'products/:id' => 'catalog#view'
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
@@ -62,6 +62,13 @@ Rails.application.routes.draw do
   #   end
 
   Spree::Core::Engine.routes.draw do
+    get '/about-us' => 'home#about_us'
+    get '/product-brochures' => 'home#product_brochures'
+    get '/contact-us' => 'home#contact_us'
+  end
+
+
+  Spree::Core::Engine.routes.draw do
     namespace :admin do
       resources :stock_locations do
         resources :stock_movements, except: [:destroy]
@@ -80,6 +87,19 @@ Spree::Core::Engine.routes.draw do
         collection do
           get 'new_1'
           post 'create_1'
+        end
+      end
+    end
+  end
+end
+
+Spree::Core::Engine.routes.draw do
+  namespace :admin do
+    resources :sales_orders do
+      resources :stock_movements do
+        collection do
+          get 'new_2'
+          post 'create_2'
         end
       end
     end

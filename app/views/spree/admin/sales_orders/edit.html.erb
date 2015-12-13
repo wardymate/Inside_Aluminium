@@ -1,0 +1,76 @@
+<%= form_for([:admin, @stock_transfer, @sales_order]) do |f| %>
+
+
+      <h3> Sales Order <%= f.text_field :number %> <span style='float:right'> Status <%= f.select :status, ['In Progress', 'Complete'] %> </span></h3>
+
+<br><br>
+
+
+
+<fieldset>
+
+  <table class="table table-bordered">
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:created_at) %></strong></td>
+      <td><%= @sales_order.created_at %></td>
+    </tr>
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:status) %></strong></td>
+      <td><%= @sales_order.status %></td>
+    </tr>
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:required_action) %></strong></td>
+      <td>
+        <% if @sales_order.status == nil %>
+          You are about to create a sales order.
+          Check the information contained here is correct.
+          If you need to make changes, simply click cancel to return to the previous page.<br><br>
+          When you are ready, simply add a sales order number in the box and click 'Create Sales Order'.<br><br>
+          If any part numbers have a status of 'Pending', they will automatically be changed to 'On Order' once you create the sales order.
+        <% else %>
+          You are about to ammend a sales order.
+          Check the information contained here is correct.<br><br>
+          If any part numbers have a status of 'Pending', they will automatically be changed to 'On Order' once you update the sales order.
+        <% end %>
+      </td>
+    </tr>
+  </table>
+
+  <fieldset>
+
+    <div id='source-movements-table' class='twelve columns alpha'>
+      <table class='table sortable'>
+        <thead data-hook='bulk_variants_header'>
+          <tr>
+            <th><%= Spree.t('variant') %></th>
+            <th><%= Spree.t('sku') %></th>
+            <th><%= Spree.t('quantity') %></th>
+            <th><%= Spree.t('due_to_arrive') %></th>
+            <th><%= Spree.t('status') %></th>
+          </tr>
+        </thead>
+        <tbody id='bulk_variants_tbody'>
+          <% @sales_order.stock_movements.each do |movement| %>
+            <tr>
+                <td><%= movement.stock_item.variant.name %></td>
+                <td><%= movement.stock_item.variant.sku %></td>
+                <td><%= movement.quantity %></td>
+                <td><%= movement.estimated_arrival_date %></td>
+                <td><%= movement.status %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+  </fieldset><hr>
+
+
+</fieldset>
+
+<%= button_link_to "Add New Part Number", new_2_admin_sales_order_stock_movements_path(@sales_order), class: 'btn-success' %><br><br>
+
+
+  <%= f.submit 'Update Sales Order', class: 'btn btn-primary' %>
+  <%= button_link_to Spree.t(:Cancel), admin_stock_transfer_path(@stock_transfer), { :class => 'btn-danger' } %>
+<% end %>

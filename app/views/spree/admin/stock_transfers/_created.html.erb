@@ -1,0 +1,47 @@
+<% all_stock_movements = @stock_transfer.stock_movements %>
+<% @unique_arrival_dates = @stock_transfer.stock_movements.map { |h| h[:estimated_arrival_date]}.uniq %>
+<% @unique_arrival_dates.sort! %>
+<% number_of_dates = @unique_arrival_dates.count %>
+<% zero = 0 %>
+
+<% number_of_dates.times do %>
+
+  <fieldset>
+
+
+    <div id='source-movements-table' class='twelve columns alpha'>
+      <table class='table sortable'>
+        <thead data-hook='bulk_variants_header'>
+          <tr>
+            <th><%= Spree.t('variant') %></th>
+            <th><%= Spree.t('sku') %></th>
+            <th><%= Spree.t('quantity') %></th>
+            <th><%= Spree.t('due_to_arrive') %></th>
+            <th><%= Spree.t('status') %></th>
+            <th><%=  %></th>
+          </tr>
+        </thead>
+        <tbody id='bulk_variants_tbody'>
+          <% @stock_transfer.stock_movements.where(estimated_arrival_date: @unique_arrival_dates[zero]).each do |movement| %>
+            <tr>
+                <td><%= movement.stock_item.variant.name %></td>
+                <td><%= movement.stock_item.variant.sku %></td>
+                <td><%= movement.quantity %></td>
+                <td><%= movement.estimated_arrival_date %></td>
+                <td><%= movement.status %></td>
+                <td>
+                  <span style='float:left'><%= button_link_to Spree.t(:edit), edit_admin_stock_location_stock_movement_path(1, movement.id), { :class => 'btn-info' } %></span>
+                  <%= button_link_to "Delete", admin_stock_transfer_stock_movement_path(@stock_transfer, movement.id), class: 'btn-danger',  method: :delete, data: { confirm: 'Are you sure?' } %>
+                </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+  </fieldset><hr>
+
+  <% zero += 1 %>
+<% end %>
+
+<%= button_link_to "Add New Part Number", new_1_admin_stock_transfer_stock_movements_path(@stock_transfer), class: 'btn-success' %>

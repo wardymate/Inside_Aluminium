@@ -1,0 +1,39 @@
+<table class="table table-bordered">
+  <tr>
+    <td width="30%"><strong><%= Spree.t(:created_at) %></strong></td>
+    <td><%= @stock_transfer.created_at %></td>
+  </tr>
+  <tr>
+    <td width="30%"><strong><%= Spree.t(:status) %></strong></td>
+    <td><%= @stock_transfer.status %></td>
+  </tr>
+  <tr>
+    <td width="30%"><strong><%= Spree.t(:required_action) %></strong></td>
+    <td>
+        <% if @stock_transfer.stock_movements.count == 0 && @stock_transfer.status != 'Void' %>
+          There are no part numbers on this purchase order.
+          Either add some part numbers below or delete this purchase order.<br><br>
+          Be sure to update Stylmark, as required when deleting items.
+        <% elsif @stock_transfer.status == 'Created' && @stock_transfer.stock_movements.count > 0 %>
+          This order has not yet been sent to Stylmark.
+          Please review the contents of this order and make any required ammendments.
+          When you are satisfied, please click 'Progress Purchase Order'.
+        <% elsif @stock_transfer.status == 'Sent To Stylmark' %>
+          This order has been sent to Stylmark.
+          You can still make ammendments but you must ensure Stylmark are aware of these.<br><br>
+          When you recieve confirmed sales order(s) back from Stylmark, please make any necessary changes and then click 'New Sales Order(s)' to create these.
+        <% elsif @stock_transfer.status == 'Confirmed By Stylmark' %>
+          This order has now been received and confirmed by Stylmark.
+          You can still make ammendments but you must ensure Stylmark are aware of these.<br><br>
+          Click 'Edit Sales Order' to add new part numbers to it or mark it as complete. 
+        <% elsif @stock_transfer.status == 'Void' %>
+          This purchase order is now void.
+          It is advisable to delete this purchase order now.<br><br>
+          Be sure to update Stylmark as required when deleting items.
+        <% elsif @stock_transfer.status == 'Complete' %>
+          This order has now been completed.<br>
+          You may wish to create a new purchase order, or click the 'View All Purchase Orders' button below.
+        <% end %>
+    </td>
+  </tr>
+</table>

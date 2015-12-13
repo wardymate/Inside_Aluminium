@@ -47,9 +47,11 @@
             </td>
             <td><%= f.text_field :estimated_arrival_date, :class => 'datepicker' %></td>
             <td>
-              <% if @stock_transfer.status == 'Created' || 'Sent To Stylmark' %>
+              <% if @stock_transfer.status == 'Created' %>
                 <%= @stock_movement.status %>
-              <% else %>
+              <% elsif @stock_transfer.status == 'Sent To Stylmark' %>
+                <%= @stock_movement.status %>
+              <% elsif @stock_transfer.status == 'Confirmed By Stylmark' %>
                 <%= f.select :status, ['On Order', 'Complete'] %>
               <% end %>
             </td>

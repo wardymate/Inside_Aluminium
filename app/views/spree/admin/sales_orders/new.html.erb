@@ -1,0 +1,19 @@
+<% content_for :page_title do %>
+  Sales Order
+<% end %>
+
+  <table class="table table-bordered">
+    <tr>
+      <td width="30%"><strong><%= Spree.t(:required_action) %></strong></td>
+      <td>
+        You are about to create a sales order.
+        Check the information contained here is correct.
+        If you need to make changes, simply click cancel to return to the previous page.<br><br>
+        When you are ready, add a sales order number in the box and click 'Create Sales Order'.<br><br>
+        If any part numbers have a status of 'Pending', they will automatically be changed to 'On Order' once you create the sales order.
+      </td>
+    </tr>
+  </table>
+
+  <br>
+  <%= render :partial => 'list_of_stock_movements' %>

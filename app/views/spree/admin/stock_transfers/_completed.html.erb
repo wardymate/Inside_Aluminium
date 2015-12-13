@@ -1,0 +1,57 @@
+<!-- View for part numbers with a status of 'Complete' -->
+
+  <% sales_orders = @stock_transfer.sales_orders %>
+
+  <% sales_orders.each do |sales_order| %>
+
+    <fieldset>
+      <h3>Sales Order (<%= sales_order.number %>)
+        <% unless sales_order.status == 'Complete' %>
+          <span style='float:right'><%= button_link_to "Delete Sales Order", admin_stock_transfer_sales_order_path(@stock_transfer, sales_order), class: 'btn-danger',  method: :delete, data: { confirm: 'Are you sure? This action cannot be undone and will cause the sales order and all associated part number orders to be deleted.' } %></span>
+          <span style='float:right'><%= button_link_to Spree.t(:edit_sales_order), edit_admin_stock_transfer_sales_order_path(@stock_transfer, sales_order), class: 'btn-info' %></span>
+        <% end %>
+      </h3>
+      <br>
+
+      <table class="table table-bordered">
+        <tr>
+          <td width="30%"><strong><%= Spree.t(:created_at) %></strong></td>
+          <td><%= sales_order.created_at %></td>
+        </tr>
+        <tr>
+          <td width="30%"><strong><%= Spree.t(:status) %></strong></td>
+          <td><%= sales_order.status %></td>
+        </tr>
+      </table>
+
+      <div id='source-movements-table' class='twelve columns alpha'>
+        <table class='table sortable'>
+          <thead data-hook='bulk_variants_header'>
+            <tr>
+              <th><%= Spree.t('variant') %></th>
+              <th><%= Spree.t('sku') %></th>
+              <th><%= Spree.t('quantity') %></th>
+              <th><%= Spree.t('due_to_arrive') %></th>
+              <th><%= Spree.t('status') %></th>
+              <th><%=  %></th>
+            </tr>
+          </thead>
+          <tbody id='bulk_variants_tbody'>
+            <% sales_order.stock_movements.each do |movement| %>
+              <tr>
+                  <td><%= movement.stock_item.variant.name %></td>
+                  <td><%= movement.stock_item.variant.sku %></td>
+                  <td><%= movement.quantity %></td>
+                  <td><%= movement.estimated_arrival_date %></td>
+                  <td><%= movement.status %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+    </fieldset><hr>
+
+  <% end %>
+
+<!-- END -->
