@@ -60,6 +60,11 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  Spree::Core::Engine.routes.draw do
+
+      get 'admin/taxons/:id/edit_1' => 'admin/taxons#edit_1', as: :edit_1_admin_taxon
+      patch 'admin/taxons/:id' => 'admin/taxons#update_1', as: :update_1_admin_taxon
+  end
 
   Spree::Core::Engine.routes.draw do
     get '/about-us' => 'home#about_us'

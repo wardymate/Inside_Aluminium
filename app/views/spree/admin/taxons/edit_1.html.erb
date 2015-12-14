@@ -1,0 +1,36 @@
+<div class ='col-sm-12'>
+
+  <h2><%= @taxon.name %></h2>
+  <hr>
+  <%= form_for [:admin, @taxon], url: {action: 'update_1'} do |f| %>
+    <div data-hook="edit_image" class="panel panel-default">
+      <div class='row'>
+        <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+          <div class="panel-heading">
+            <h1 class="panel-title">
+              <%= @taxon.icon_file_name %>
+            </h1>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="form-group">
+          <div class='row'>
+            <div class="col-sm-4 col-sm-offset-4">
+              <%= f.file_field :icon %>
+            </div>
+          </div><hr>
+          <div class='row'>
+            <div class="col-sm-8 col-sm-offset-4">
+              <div class="form-actions" data-hook="buttons">
+                <%= button Spree.t('actions.update'), 'save' %>
+                <span class="or"><%= Spree.t(:or) %></span>
+                <%= button_link_to Spree.t('actions.cancel'), admin_taxons_path, icon: 'delete' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

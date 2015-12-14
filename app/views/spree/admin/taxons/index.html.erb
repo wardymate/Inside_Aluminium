@@ -1,0 +1,44 @@
+
+<!-- Heading -->
+  <% content_for :page_title do %>
+    <%= Spree.t(:taxons) %>
+  <% end %>
+<!-- END -->
+
+<!-- Table -->
+  <table class="table" id='listing_stock_transfers' data-hook>
+    <thead>
+      <tr>
+        <th><%= Spree.t(:taxonomy) %></th>
+        <th><%= Spree.t(:category) %></th>
+        <th><%= Spree.t(:sub_category) %></th>
+        <th><%= Spree.t(:has_image?) %></th>
+        <th><%=  %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @taxons.each do |taxon| %>
+        <% parent = taxon.parent %>
+        <tr>
+          <td><%= Spree::Taxonomy.find(taxon.taxonomy_id).name %></td>
+          <!-- Logic for category column -->
+          <% if parent != nil %>
+            <td><%= parent.name %></td>
+          <% else %>
+            <td><%= %></td>
+          <% end %>
+          <!-- END -->
+          <td><%= taxon.name %></td>
+          <td>
+            <% unless taxon.icon_file_name == nil %>
+              <%= 'Yes' %>
+            <% end %>
+          </td>
+          <td>
+            <%= button_link_to Spree.t(:edit), edit_1_admin_taxon_path(taxon.id), { :class => 'btn-info' } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<!-- END -->

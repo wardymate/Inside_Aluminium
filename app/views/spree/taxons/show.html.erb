@@ -1,24 +1,51 @@
-<% if @taxon.name == 'Categories' %>
-  <%= %>
-<% else %>
-  <h1 class="taxon-title"><%= @taxon.name %></h1>
+<div class='col-sm-12'>
+  <!-- Heading-->
+    <% if @taxon.name == 'Categories' %>
+      <%= %>
+    <% else %>
 
-  <% content_for :sidebar do %>
-    <div data-hook="taxon_sidebar_navigation">
-      <%= render partial: 'spree/shared/taxonomies' %>
-      <%= render partial: 'spree/shared/filters' if @taxon.leaf? %>
-    </div>
-  <% end %>
+  <!-- END -->
 
-  <div data-hook="taxon_products">
-    <%= render partial: 'spree/shared/products', locals: { products: @products, taxon: @taxon } %>
-  </div>
-
-  <% unless params[:keywords].present? %>
-    <div data-hook="taxon_children">
-      <% cache [I18n.locale, @taxon] do %>
-        <%= render partial: 'taxon', collection: @taxon.children %>
+  <!-- Side Navigation -->
+      <% content_for :sidebar do %>
+        <div data-hook="taxon_sidebar_navigation">
+          <%= render partial: 'spree/shared/taxonomies' %>
+          <%= render partial: 'spree/shared/filters' if @taxon.leaf? %>
+        </div>
       <% end %>
+  <!-- END -->
+
+  <!-- Banner Image -->
+    <% if @taxon.children.count > 0 %>
+      <%= image_tag @taxon.icon.url(:original), class: 'img-responsive' %>
+    <% end %>
+  <!-- END -->
+  <hr>
+  <!-- Products -->
+  <% if @taxon.children.count == 0 %>
+    <div data-hook="taxon_products">
+      <%= render partial: 'spree/shared/products', locals: { products: @products, taxon: @taxon } %>
     </div>
   <% end %>
-<% end %>
+  <!-- END -->
+
+  <!-- Subcategories -->
+      <div class='row'>
+        <% unless params[:keywords].present? %>
+          <% @taxon.children.each do |child| %>
+            <div class='col-sm-4'>
+              <div class="panel panel-default">
+                  <div class="panel-body text-center product-body">
+                    <%= image_tag child.icon.url(:original), class: 'img-responsive', style: 'height: 100%; margin: auto'%><br>
+                  </div>
+                  <div class="panel-footer text-center">
+                    <span><%= link_to child.name, seo_url(child), class: 'breadcrumbs' %></span>
+                  </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <!-- END -->
+</div>
