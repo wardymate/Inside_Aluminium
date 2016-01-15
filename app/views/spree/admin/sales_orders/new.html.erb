@@ -6,6 +6,7 @@
     <tr>
       <td width="30%"><strong><%= Spree.t(:required_action) %></strong></td>
       <td>
+        <%# this text is repeated in the new.html.erb template should look to extract this as changing the texxt will require changing 2 files. either extract to partial or move to a model. %>
         You are about to create a sales order.
         Check the information contained here is correct.
         If you need to make changes, simply click cancel to return to the previous page.<br><br>

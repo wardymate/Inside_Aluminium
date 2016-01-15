@@ -1,3 +1,6 @@
+<%# Not sure that all the comments regarding what the html elements are is necessary - the css classes should be descriptive. Here you have a comment %>
+<%# indiciating that this is a sidebar menu and just below it the embedded ruby uses a display helper method showing content_for :sidebar. Considered best practice %>
+<%# is not to comment code - the code should be readable enough not to require comments. If you have to comment code then it is not clear what it is doing and should find a way to refactor or rewrite. Similar with the Jumbotron comments on this page. %>
 <!-- Sidebar Menu -->
   <% content_for :sidebar do %>
     <div data-hook="homepage_sidebar_navigation">
@@ -12,6 +15,7 @@
 
     <div class="jumbotron">
       <h2>Get in Touch</h2><br>
+<%# extract in-line styles to css %>
       <p style='font-size: 14px'>
         Address:<br><br>
         Inside Aluminium<br>

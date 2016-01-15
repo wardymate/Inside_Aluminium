@@ -1,5 +1,7 @@
 # This code relates to estimated delivery date for in stock items
 
+# Lots wrong with this - a new object is being created with one of the paramters a partial html template with embedded logic. The embedded logic is also very badly written. use of undescriptive variables a,b and @c. a should be updated_at or something similar. b could be renamed as estimated_delivery_date and I think you get away without reassigning state to the @c variable. The huge if, elsif blocks should be extracted to an object class - in the view you would just make a method call to return the desired repsonse. Anyone I have worked with would not look at any more code from a developer if they saw this and would not consider them for work. Sounds harsh but is reality.
+
 Deface::Override.new(:virtual_path => 'spree/checkout/_delivery',
   :name => 'ammend_checkout_delivery_partial',
   :insert_after => "ul.list-group",

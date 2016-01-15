@@ -1,7 +1,7 @@
 Spree::Admin::StockMovementsController.class_eval do
 
   def update
-
+# this controller is overly complex - some of this logic should be extracted to a service object - the same with the other controllers
     @stock_movement = Spree::StockMovement.find(params[:id])
     params.require(:stock_movement).permit!
 

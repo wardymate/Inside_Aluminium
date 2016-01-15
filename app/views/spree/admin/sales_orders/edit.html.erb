@@ -2,7 +2,7 @@
 
 
       <h3> Sales Order <%= f.text_field :number %> <span style='float:right'> Status <%= f.select :status, ['In Progress', 'Complete'] %> </span></h3>
-
+<%# the above array should be in a helper method - the views should not have any knoledge of the status options - you may wish to expand this in the future and will be a problem maintaining. %>
 <br><br>
 
 
@@ -11,6 +11,7 @@
 
   <table class="table table-bordered">
     <tr>
+      <%# the width below should be extracted to a class epsecially as it is repeated - investigate the use of flex in css here as well %>
       <td width="30%"><strong><%= Spree.t(:created_at) %></strong></td>
       <td><%= @sales_order.created_at %></td>
     </tr>

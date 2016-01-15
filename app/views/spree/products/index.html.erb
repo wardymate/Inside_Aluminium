@@ -1,3 +1,5 @@
+<%# I feel like all this logic should be pulled back to a controller rather than sitting in the view here as you are chosing which partials to render. %>
+
 <% if "spree/products" == params[:controller] && @taxon || !@taxonomies.empty? %>
   <% content_for :sidebar do %>
     <div data-hook="homepage_sidebar_navigation">

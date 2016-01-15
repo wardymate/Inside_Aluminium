@@ -1,3 +1,4 @@
+<%# this find should be moved back to the controller - although looking at the controller it is already made there so no need to reassign the @stock_transfer variable %>
 <% @stock_transfer = Spree::StockTransfer.find(@stock_movement.originator_id) %>
 
 <% content_for :page_title do %>
@@ -47,11 +48,18 @@
             </td>
             <td><%= f.text_field :estimated_arrival_date, :class => 'datepicker' %></td>
             <td>
+  <%# the logic below here both the if and elsif produce the same result maybe should be: %>
+<%# @stock_transfer.status == 'Confirmed by Stylmark' %>
+<%# <%= f.select :status, ['On Order', 'Complete'] %1> %>
+<%# else %>
+<%# <%= @stock_movement.status %1> %>
+<%# end (not correct syntax mor for illustration) %>
               <% if @stock_transfer.status == 'Created' %>
                 <%= @stock_movement.status %>
               <% elsif @stock_transfer.status == 'Sent To Stylmark' %>
                 <%= @stock_movement.status %>
               <% elsif @stock_transfer.status == 'Confirmed By Stylmark' %>
+                <%# extract array herer to helper methdo %>
                 <%= f.select :status, ['On Order', 'Complete'] %>
               <% end %>
             </td>
